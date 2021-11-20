@@ -1,0 +1,18 @@
+file_directory: '%kernel.root_dir%/../web/uploads/assets'
+gearman:
+  bundles:
+    AppBundle:
+      name: App
+      active: true
+      include:
+        - Gearman
+      ignore:
+        - DependencyInjection
+        - Resources
+  defaults:
+    iterations: 5
+    job_prefix: 'parse_csv_job'
+  servers:
+    localhost:
+      host: 127.0.0.1
+      port: 4730
