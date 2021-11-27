@@ -82,7 +82,7 @@ class Xml2CsvCommand extends Command
             ->setHelp($this->getCommandHelp())
             // commands can optionally define arguments and/or options (mandatory and optional)
             // see https://symfony.com/doc/current/components/console/console_arguments.html
-            ->addArgument('remotefile', InputArgument::OPTIONAL, 'The username of the new user')
+            ->addArgument('remotefile', InputArgument::OPTIONAL, 'whether fetch from remote or local')
 
         ;
     }
