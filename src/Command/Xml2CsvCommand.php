@@ -120,7 +120,7 @@ class Xml2CsvCommand extends Command
             'If you prefer to not use this interactive wizard, provide the',
             'arguments required by this command as follows:',
             '',
-            ' $ php bin/console app:add-user username password email@example.com',
+            ' $ php bin/console app:xml-csv remotefile',
             '',
             'Now we\'ll ask you for the value of all the missing command arguments.',
         ]);
@@ -195,28 +195,6 @@ class Xml2CsvCommand extends Command
 
     }
 
-    private function validateUserData($username, $plainPassword, $email, $fullName): void
-    {
-        // first check if a user with the same username already exists.
-        $existingUser = $this->users->findOneBy(['username' => $username]);
-
-        if (null !== $existingUser) {
-            throw new RuntimeException(sprintf('There is already a user registered with the "%s" username.', $username));
-        }
-
-        // validate password and email if is not this input means interactive.
-        $this->validator->validatePassword($plainPassword);
-        $this->validator->validateEmail($email);
-        $this->validator->validateFullName($fullName);
-
-        // check if a user with the same email already exists.
-        $existingEmail = $this->users->findOneBy(['email' => $email]);
-
-        if (null !== $existingEmail) {
-            throw new RuntimeException(sprintf('There is already a user registered with the "%s" email.', $email));
-        }
-    }
-
     /**
      * The command help is usually included in the configure() method, but when
      * it's too long, it's better to define a separate method to maintain the
@@ -225,27 +203,14 @@ class Xml2CsvCommand extends Command
     private function getCommandHelp(): string
     {
         return <<<'HELP'
-The <info>%command.name%</info> command creates new users and saves them in the database:
+The <info>%command.name%</info> command converts xml file data/coffee_feed.xml to csv
 
-  <info>php %command.full_name%</info> <comment>username password email</comment>
+  <info>php %command.full_name%</info> <comment>remotefile</comment>
 
-By default the command creates regular users. To create administrator users,
-add the <comment>--admin</comment> option:
+If remotefile is 0 the file is read from local
+If remotefile is 1 the file is read from ftp
 
-  <info>php %command.full_name%</info> username password email <comment>--admin</comment>
-
-If you omit any of the three required arguments, the command will ask you to
-provide the missing values:
-
-  # command will ask you for the email
-  <info>php %command.full_name%</info> <comment>username password</comment>
-
-  # command will ask you for the email and password
-  <info>php %command.full_name%</info> <comment>username</comment>
-
-  # command will ask you for all arguments
-  <info>php %command.full_name%</info>
-
+Here i am using CsvWriter. We can use DoctrineWriter to write to DB
 HELP;
     }
 }

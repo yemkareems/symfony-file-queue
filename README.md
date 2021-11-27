@@ -1,13 +1,17 @@
-File upload demo application
+File conversion demo application
 
-Steps for the flow:
-User uploads file from the ui to the server
-Request reaches 
-File is moved to uploads directory -- can be moved to azure/aws cloud
-Details of file saved in db table
-User upload finished
+git clone git@github.com:yemkareems/symfony-file-queue.git
+cd symfony-file-queue/
+git checkout origin/master
+composer install
+php bin/console app:xml-csv 0
+or
+php bin/console app:xml-csv 1
+php vendor/bin/phpunit tests/Command/Xml2CsVCommandTest.php
 
-Control handed over to gearman worker for processing the file
-In the backgroud gearman processes the uploaded file and dumps info from file into database
-To spawn the gearman worker we use supervisor
+
+If remotefile is 0 the file is read from local
+If remotefile is 1 the file is read from ftp
+
+Here i am using CsvWriter to write to CSV. We can use DoctrineWriter to write to DB
 
