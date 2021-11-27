@@ -150,12 +150,12 @@ class Xml2CsvCommand extends Command
 
         $remotefile = $input->getArgument('remotefile');
 
-        if(!in_array($remotefile,[0,1])){
+        if(!in_array($remotefile, ['0','1'])){
             $this->logger->error("remote file is not 1 or 0. It is ".$remotefile);
             throw new RuntimeException(sprintf('Remote file should be either 1 or 0. 1 specifies fetch from remote'));
         }
         $xmlurl = $this->container->get('localfile');
-        if($remotefile){
+        if($remotefile == '1'){
             $ftp_server = $this->container->get('ftp_server');
             $ftp_username = $this->container->get('ftp_username');
             $ftp_pass = $this->container->get('ftp_pass');
@@ -166,10 +166,10 @@ class Xml2CsvCommand extends Command
 
         $xml = simplexml_load_file($xmlurl);
 
-        if($xml === false){
-            $ERROR = "remote file is not found  ".$xmlurl;
-            $this->logger->error($ERROR);
-            throw new RuntimeException($ERROR);
+        if($xml == false){
+            $error = "remote file is not found  ".$xmlurl;
+            $this->logger->error($error);
+            throw new RuntimeException($error);
 
         }
         $writer = new CsvWriter();
