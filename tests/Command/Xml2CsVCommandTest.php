@@ -47,4 +47,19 @@ class Xml2CsvCommandTest extends KernelTestCase
         $dirName = 'data/';
         $this->assertDirectoryIsWritable($dirName);
     }
+
+    public function testExecuteLocal(){
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+        $command = $application->find('app:xml-csv');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(
+            array(
+                'command'  => $command->getName(),
+                'remotefile' => '0',
+            )
+        );
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString('file created successfully', $output);
+    }
 }
